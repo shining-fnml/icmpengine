@@ -1,0 +1,17 @@
+﻿This is the README file for icmp dataengine version 0.1.1
+
+This is a plasma dataengine for Kde 4.x to be used in conjunction with “Kool morning”, a plasma applet to monitor the network status of several computers at once. “Kool morning” is available at http://kde-look.org/content/show.php?content=160132
+
+Its official web page is https://github.com/shining-fnml/icmpdataengine/
+
+It is possible to use icmp dataengine with any other software, as it comes with a LGPL v3 licence.
+
+Instructions for compiling and installing icmp dataengine can be found in the INSTALL file of the source distribution.
+
+For the engine to run properly is necessary to have enough privileges for the icmp protocol. In poor words: you need a suid ping binary and probably it won't work anyway as a guest operating system in a virtual machine running as a normal user.
+
+For those interested in using icmp dataengine with programs other than “Kool morning”, all they need to know is the engine accepts an Ip address as a string at its input and returns one of these three strings: “Unknown”, “Offline” and “Online”.
+
+Shining
+
+5 august 2013
