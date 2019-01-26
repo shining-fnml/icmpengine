@@ -1,0 +1,27 @@
+﻿	Five steps to configure, compile and install icmp dataengine
+
+1. Before you start, make sure you have all the necessary to compile Kde
+programs for your system. On Ubuntu family (and probably Debian) you need the
+following packages:
+	- build-essential
+	- cmake
+	- kdelibs5-dev
+
+2. Open the file CmakeLists.txt with a text editor and find the settings for
+PLUGIN_INSTALL_DIR and SERVICES_INSTALL_DIR. Probably they are at the top of
+the file. Check if the pointed directories exist and actually contain file
+ending in .so (the first) and in .desktop (the latter).
+
+3. Run this command (without the dollar sign)
+	$ cmake CmakeLists && make
+
+4. Become root and type:
+	# make install
+or if you're an enabled sudoer:
+	$ sudo make install
+
+5. Leave root privileges and restart plasma desktop this way:
+	$ kquitapp plasma-desktop; sleep 1; plasma-desktop 2>/dev/null
+
+
+Then install “Kool morning” and configure the applet.

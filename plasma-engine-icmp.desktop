@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Icmp Engine
+Comment=Discover which hosts are up and running
+Icon=network-wired
+Type=Service
+ 
+X-KDE-ServiceTypes=Plasma/DataEngine
+X-KDE-Library=plasma_engine_icmp
+X-Plasma-EngineName=icmp
+X-KDE-PluginInfo-Author=Shining
+X-KDE-PluginInfo-Email=shining@freaknet.org
+X-KDE-PluginInfo-Name=icmp
+X-KDE-PluginInfo-Version=0.2.0
+X-KDE-PluginInfo-Website=https://github.com/shining-fnml/icmpdataengine/
+X-KDE-PluginInfo-Category=network_information
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true
