@@ -108,7 +108,7 @@ bool IcmpEngine::sourceRequestEvent(const QString &name)
 	Source *pSource = new Source(name);
 	std::list <Source *>::iterator cSourceIterator = findSource(name);
 
-	qCDebug(ICMPENGINE) << "IcmpEngine::sourceRequestEvent";
+	// qCDebug(ICMPENGINE) << "IcmpEngine::sourceRequestEvent";
 	if (cSourceIterator != sources.end()) {
 		delete (pSource);
 		result = (*(cSourceIterator))->getStatus();
