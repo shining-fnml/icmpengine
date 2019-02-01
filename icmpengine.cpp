@@ -124,7 +124,7 @@ bool IcmpEngine::sourceRequestEvent(const QString &name)
 
 bool IcmpEngine::updateSourceEvent(const QString &source)
 {
-	qCDebug(ICMPENGINE) << "IcmpEngine::updateSourceEvent(source =" << source << ")";
+	// qCDebug(ICMPENGINE) << "IcmpEngine::updateSourceEvent(source =" << source << ")";
 	setData(source, I18N_NOOP(key), status[(*(findSource(source)))->getStatus()]);
 	return true;
 }
