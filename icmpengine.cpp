@@ -64,8 +64,10 @@ void Source::Execute(void *target)
 			currentStatus = unknown;
 		else {
 			int retcode = WEXITSTATUS(pclose(fTarget));
+#if 0
 			if (retcode)
 				qCDebug(ICMPENGINE) << "Execute(" << (const char*)target << "): " << retcode;
+#endif
 			currentStatus = retcode > 1 ? unknown : !retcode;
 		}
 		sleep (1);
