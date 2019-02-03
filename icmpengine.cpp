@@ -62,8 +62,12 @@ void Source::Execute(void *target)
 	while (true) {
 		if ((fTarget = popen((const char *)target, "w")) == NULL)
 			currentStatus = unknown;
-		else
-			currentStatus = !pclose(fTarget);
+		else {
+			int retcode = WEXITSTATUS(pclose(fTarget));
+			if (retcode)
+				qCDebug(ICMPENGINE) << "Execute(" << (const char*)target << "): " << retcode;
+			currentStatus = retcode > 1 ? unknown : !retcode;
+		}
 		sleep (1);
 	}
 }
