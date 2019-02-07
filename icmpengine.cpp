@@ -19,12 +19,65 @@
  
 #include "icmpengine.h"
 #include <KLocalizedString>
+#include <QtNetwork/QHostInfo>
+
+#include <arpa/inet.h>
 #include <unistd.h>
 
 #define MINIMUM_INTERVAL 5000 // 5 seconds
+#define MAGIC_SIZE	102
 
 Q_LOGGING_CATEGORY(ICMPENGINE, "icmpengine")
 
+
+void mac_to_magic(unsigned char *buffer, QString &mac)
+{
+	unsigned char address[6];
+	mac.replace( ":", "" );
+	mac.replace( "-", "" );
+	bool check;
+	for (int position=0; position<6; position++) {
+		QStringRef ref = QStringRef(&mac, position*2, 2);
+		address[position] = ref.toUShort(&check, 16);
+		buffer[position] = 0xFF;
+	}
+	for (int position=1; position<17; position++) {
+		unsigned char *cursor = buffer+position*6;
+		memcpy((void *)cursor, address, 6);
+	}
+}
+
+/* Stolen from https://shadesfgray.wordpress.com/2010/12/17/wake-on-lan-how-to-tutorial/ */
+static void wol(in_addr_t ip_addr, void *tosend)
+{
+	int udpSocket;
+	struct sockaddr_in udpClient, udpServer;
+	int broadcast = 1;
+	ssize_t sent;
+
+	udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+
+	/** you need to set this so you can broadcast **/
+	if (setsockopt(udpSocket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast) == -1) {
+		qDebug() << "error: setsockopt (SO_BROADCAST)";
+		return;
+	}
+	udpClient.sin_family = AF_INET;
+	udpClient.sin_addr.s_addr = INADDR_ANY;
+	udpClient.sin_port = 0;
+
+	bind(udpSocket, (struct sockaddr*)&udpClient, sizeof(udpClient));
+
+	/** set server end point (the broadcast addres)**/
+	udpServer.sin_family = AF_INET;
+	udpServer.sin_addr.s_addr = htonl(ip_addr | 0xFF);
+	udpServer.sin_port = htons(7);
+
+	/** send the packet **/
+	sent = sendto(udpSocket, tosend, sizeof(unsigned char) * MAGIC_SIZE, 0, (struct sockaddr*)&udpServer, sizeof(udpServer));
+	if (sent != MAGIC_SIZE)
+		qDebug() << "warning: sent " << sent << " bytes instead of " << MAGIC_SIZE;
+}
 
 int Thread::Start(void * arg)
 {
@@ -110,6 +163,22 @@ std::list <Source *>::iterator IcmpEngine::findSource(const QString &name)
  
 bool IcmpEngine::sourceRequestEvent(const QString &name)
 {
+	QStringList splitted = name.split("/");
+	switch (splitted.size()) {
+		case 1:
+			pingRequestEvent(name);
+			break;
+		case 2:
+			wake(splitted[0], splitted[1]);
+			break;
+		default:
+			return false;
+	}
+	return true;
+}
+
+void IcmpEngine::pingRequestEvent(const QString &name)
+{
 	int result;
 	Source *pSource = new Source(name);
 	std::list <Source *>::iterator cSourceIterator = findSource(name);
@@ -125,7 +194,6 @@ bool IcmpEngine::sourceRequestEvent(const QString &name)
 		result = pSource->getStatus();
 	}
 	setData(name, I18N_NOOP(key), status[result]);
-	return true;
 }
 
 bool IcmpEngine::updateSourceEvent(const QString &source)
@@ -135,6 +203,21 @@ bool IcmpEngine::updateSourceEvent(const QString &source)
 	return true;
 }
 
+
+void IcmpEngine::wake(QString host, QString mac)
+{
+	unsigned char tosend[MAGIC_SIZE];
+
+	mac_to_magic(tosend, mac);
+	QHostInfo info = QHostInfo::fromName(host);
+	if (info.addresses().isEmpty()) {
+		qCDebug(ICMPENGINE) << "cannot find host " << host;
+		return;
+	}
+	QHostAddress address = info.addresses().first();
+	wol(address.toIPv4Address(), tosend);
+	// emit somePropertyChanged(1);
+}
 
 // This does the magic that allows Plasma to load
 // this plugin.  The first argument must match

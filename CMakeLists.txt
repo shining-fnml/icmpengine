@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 set(QT_MIN_VERSION "5.4.0")
 set(KF5_MIN_VERSION "5.9.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Network)
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
@@ -26,7 +26,7 @@ set(icmp_engine_SRCS
     icmpengine.cpp
 )
 
-LINK_LIBRARIES (pthread)
+LINK_LIBRARIES (pthread Qt5Network)
 
 add_library(plasma_engine_icmp MODULE ${icmp_engine_SRCS})
 kcoreaddons_desktop_to_json(plasma_engine_icmp plasma-engine-icmp.desktop)

@@ -1,4 +1,4 @@
-﻿	Five steps to configure, compile and install icmp dataengine
+﻿	Six steps to configure, compile and install icmp dataengine
 
 1. Before you start, make sure you have all the necessary to compile Kde
 programs for your system. On Ubuntu family (and probably Debian) you need the
@@ -12,15 +12,18 @@ PLUGIN_INSTALL_DIR and SERVICES_INSTALL_DIR. Probably they are at the top of
 the file. Check if the pointed directories exist and actually contain file
 ending in .so (the first) and in .desktop (the latter).
 
-3. Run this command (without the dollar sign)
-	$ cmake CmakeLists && make
+3. Make the dir 'build' and cd to it
+	$ mkdir build && cd build
 
-4. Become root and type:
+4. Run this command (without the dollar sign)
+	$ cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make
+
+5. Become root and type:
 	# make install
 or if you're an enabled sudoer:
 	$ sudo make install
 
-5. Leave root privileges and restart plasma desktop this way:
+6. Leave root privileges and restart plasma desktop this way:
 	$ kquitapp plasma-desktop; sleep 1; plasma-desktop 2>/dev/null
 
 

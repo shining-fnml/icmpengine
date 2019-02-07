@@ -100,6 +100,8 @@ class IcmpEngine: public Plasma::DataEngine
 		int statusLatest, statusPrevious;
 		std::list <Source *> sources;
 		std::list <Source *>::iterator findSource(const QString &name);
+		void pingRequestEvent(const QString &name);
+		void wake(QString host, QString mac);
 };
 
 Q_DECLARE_LOGGING_CATEGORY(ICMPENGINE)
