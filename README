@@ -1,6 +1,6 @@
-﻿This is the README file for icmp dataengine version 0.1.1
+﻿This is the README file for icmp dataengine version 1.0.0
 
-This is a plasma dataengine for Kde 4.x to be used in conjunction with “Kool morning”, a plasma applet to monitor the network status of several computers at once. “Kool morning” is available at http://kde-look.org/content/show.php?content=160132
+This is a plasma dataengine for Kde 5.x to be used in conjunction with “Kool morning”, a plasma applet to monitor the network status of several computers at once. “Kool morning” is available at http://kde-look.org/content/show.php?content=160132
 
 Its official web page is https://github.com/shining-fnml/icmpdataengine/
 
@@ -10,8 +10,17 @@ Instructions for compiling and installing icmp dataengine can be found in the IN
 
 For the engine to run properly is necessary to have enough privileges for the icmp protocol. In poor words: you need a suid ping binary and probably it won't work anyway as a guest operating system in a virtual machine running as a normal user.
 
-For those interested in using icmp dataengine with programs other than “Kool morning”, all they need to know is the engine accepts an Ip address as a string at its input and returns one of these three strings: “Unknown”, “Offline” and “Online”.
+For those interested in using icmp dataengine with programs other than
+“Kool morning”, all they need to know is the engine accepts an Ip
+address as a string or a hostname at its input and returns one of these three strings: “Unknown”, “Offline” and “Online”.
+
+If the Ip address or hostname is followed by a valid mac address it can
+wake the target host via a broadcast Udp packet on port 7. The mac
+address must be 12 hex digits in string format. Everty pair of digits
+can be separated by a colon, a dash or nothing.
+Ip address and mac address require a slash as a separator.
+
 
 Shining
 
-5 august 2013
+7 february 2019
